@@ -34,6 +34,21 @@ const port = process.env.PORT || 5000;
  
    res.redirect(shortUrl.full)
  })
+ app.delete('/shortUrls/:id', async (req, res) => {
+  try {
+    const result = await ShortUrl.findByIdAndDelete({ _id: req.params.id });
+    if (result.deletedCount === 0) {
+      res.status(404).json({ message: 'URL not found' });
+    } else {
+      res.status(204).send();
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+
 app.listen(port, () => {
     console.log('listening on port', port);
 });

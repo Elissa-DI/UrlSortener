@@ -7,13 +7,79 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <title>Document</title>
 </head>
+  <style>
+    h1 {
+      margin-left: 400px;
+      font-family: mv boli;
+      font-weight: bold;
+      font-size: 35px;
+      animation: colorize 5s ease-in-out infinite;
+    }
+    @keyframes colorize {
+      0%{
+        color: white;
+      }
+      50%{
+        color: black;
+      }
+      100%{
+        color: black;
+      }
+    }
+    h1 span {
+      animation: sizing 5s ease-in-out infinite;
+    }
+    @keyframes sizing {
+      0%{
+        font-size: 30px;
+      }
+      50%{
+        font-size: 20;
+        color: gray;
+      }
+      100%{
+        font-size: 15px;
+        color: white;
+      }
+    }
+    input {
+      width: 700px;
+      height: 35px;
+      margin-left: 25px;
+    }
+    #submit {
+      width: 100px;
+      height: 30px;
+      margin-left: 5px;
+      background-color: aqua;
+      color: white;
+      font-weight: bold;
+      font-size: 17px;
+      border-radius: 5px;
+      border: none;
+      transition: 0.7s;
+    }
+    #submit:hover{
+     width: 102px;
+     height: 32px; 
+     background-color: white;
+     color: aqua;
+     border: 1px solid aqua;
+    }
+    .delete-btn {
+      border: none;
+      font-size: 20px;
+      color: rgb(164, 9, 9);
+      background-color: none;
+    }
+  </style>
 <body>
   <div class="container">
-    <h1>URL Shrinker</h1>
+    <h1>URL <span>Miniature</span></h1>
     <form action="/shortUrls" method="POST" class="my-4 form-inline">
       <label for="fullUrl" class="sr-only">Url</label>
-      <input required placeholder="Url" type="url" name="fullUrl" id="fullUrl" class="form-control col mr-2">
-      <button class="btn btn-success" type="submit">Shrink</button>
+      <input required placeholder="Url" type="url" name="fullUrl" id="fullUrl" autocomplete="off">
+      <button id="submit" type="submit">Shrink</button>
     </form>
     
     <table class="table table-striped table-responsive">
@@ -30,10 +96,34 @@
             <td><a href="<%= shortUrl.full %>"><%= shortUrl.full %></a></td>
             <td><a href="<%= shortUrl.short %>"><%= shortUrl.short %></a></td>
             <td><%= shortUrl.clicks %></td>
+            <td><button class="delete-btn" data-id="<%= shortUrl._id %>" onclick="deleteBtn(this)"><ion-icon name="trash-outline"></ion-icon></button></td>
           </tr>
         <% }) %>
       </tbody>
     </table>
   </div>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js">
+  </script>
+  <script>
+    // const deleteBtn = (btn) => {
+    //    var row = btn.parentNode.parentNode;
+    // row.parentNode.removeChild(row);
+    // }
+    const deleteBtn = (btn) => {
+  const shortUrlId = btn.getAttribute('data-id');
+  fetch(`/shortUrls/${shortUrlId}`, {
+    method: 'DELETE'
+  }).then(response => {
+      // Remove the deleted row from the table
+      var row = btn.parentNode.parentNode;
+      row.parentNode.removeChild(row);
+  }).catch(error => {
+    console.error(error);
+  });
+}
+
+    
+  </script>
 </body>
 </html>
