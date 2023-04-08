@@ -32,7 +32,7 @@ const port = process.env.PORT || 5000;
    shortUrl.clicks++
    shortUrl.save()
  
-   res.redirect(shortUrl.full)
+   res.redirect(shortUrl.full);
  })
  app.delete('/shortUrls/:id', async (req, res) => {
   try {
